@@ -5,9 +5,10 @@ import React from "react";
 export interface MarqueeProps {
     speed: number;
     children: JSX.Element;
+    gap: string;
 }
 
-const Marquee = ({ speed, children, ...props }: MarqueeProps) => {
+const Marquee = ({ speed, children, gap = "0px", ...props }: MarqueeProps) => {
     const itemRef = useRef<HTMLDivElement>(null);
     const containerRef = useRef<HTMLDivElement>(null);
     const [childNum, setChildNum] = useState(1);
@@ -30,9 +31,10 @@ const Marquee = ({ speed, children, ...props }: MarqueeProps) => {
             --marquee-height: ${itemRef.current.getBoundingClientRect().height};
             --marquee-speed: ${speed};
             --marquee-end: ${(1 / (count + 1)) * 100};
+            --marquee-gap: ${gap};
         `
         );
-    }, [windowWidth]);
+    }, [windowWidth, speed]);
 
     return (
         <StyledContainer {...props} ref={containerRef}>
@@ -81,6 +83,8 @@ const StyledContainer = styled.div`
 const StyledMarqueeItem = styled.span`
     display: flex;
     align-items: center;
+
+    padding-right: var(--marquee-gap);
 `;
 
 export default Marquee;
